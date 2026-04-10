@@ -1,0 +1,87 @@
+/* --- BASIS-EINSTELLUNGEN --- */
+:root {
+  --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --color-text: #1a1a1a;
+  --color-secondary: #777;
+  --spacing-header: 30px 60px;
+  --nav-gap: 35px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: #ffffff;
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- HEADER & NAVIGATION --- */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-header);
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1000;
+}
+
+.logo a {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-decoration: none;
+  color: var(--color-text);
+  text-transform: uppercase;
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--nav-gap);
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: var(--color-text);
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.main-nav a:hover {
+  color: var(--color-secondary);
+}
+
+/* Der Fix für den "About" Abstand */
+.nav-spacer-left {
+  margin-left: 40px;
+  padding-left: 0; /* Sicherstellen, dass kein Padding stört */
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .site-header {
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .main-nav ul {
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .nav-spacer-left {
+    margin-left: 0;
+  }
+}

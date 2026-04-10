@@ -1,0 +1,74 @@
+/* --- ABOUT PAGE LAYOUT --- */
+.about-page-container {
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 0 40px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Zwei gleich große Spalten */
+  gap: 100px;
+  align-items: start;
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.about-text h1 {
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  margin-bottom: 40px;
+}
+
+.about-intro {
+  font-size: 18px;
+  line-height: 1.8;
+  margin-bottom: 50px;
+  color: #333;
+}
+
+/* Info-Sektionen */
+.info-block {
+  margin-bottom: 45px;
+}
+
+.info-block h2 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #999;
+  margin-bottom: 15px;
+}
+
+.info-block p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.info-block a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Mobile Optimierung */
+@media (max-width: 850px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  
+  .about-image {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .about-page-container {
+    margin: 40px auto;
+  }
+}
