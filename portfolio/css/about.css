@@ -1,74 +1,106 @@
-/* --- ABOUT PAGE LAYOUT --- */
-.about-page-container {
-  max-width: 1200px;
-  margin: 80px auto;
-  padding: 0 40px;
+/* --- ABOUT PAGE CONTENT --- */
+.about-section-main {
+  padding: 80px 60px 100px 60px; /* Mehr Platz nach oben für Luftigkeit */
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Zwei gleich große Spalten */
-  gap: 100px;
+  /* Das Bild erhält eine feste, kleinere Breite (400px), der Text füllt den Rest */
+  grid-template-columns: 400px 1fr; 
+  gap: 120px; /* Großer Abstand zwischen Bild und Text wirkt sehr modern */
   align-items: start;
+}
+
+/* Bild-Styling - Kleiner & Zentriert in der Spalte */
+.about-image {
+  max-width: 350px; /* Hier wird das Foto final begrenzt */
+  width: 100%;
 }
 
 .about-image img {
   width: 100%;
   height: auto;
   display: block;
+  filter: grayscale(10%); /* Sanfter Look */
 }
 
-.about-text h1 {
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  margin-bottom: 40px;
+/* Text-Inhalt */
+.about-content h1 {
+  /* Angepasst an den dezenten Galerie-Stil */
+  font-size: 15px; 
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 45px;
+  color: #000;
 }
 
 .about-intro {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1.8;
-  margin-bottom: 50px;
   color: #333;
+  margin-bottom: 60px;
+  max-width: 550px; /* Optimale Lesebreite */
 }
 
-/* Info-Sektionen */
+/* Die Info-Blöcke (Kontakt, Ausbildung etc.) */
 .info-block {
-  margin-bottom: 45px;
+  margin-bottom: 40px;
 }
 
 .info-block h2 {
   font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 3px;
+  font-weight: 600;
   color: #999;
-  margin-bottom: 15px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
 }
 
 .info-block p {
   font-size: 14px;
   line-height: 1.7;
+  color: #000;
 }
 
 .info-block a {
-  color: inherit;
+  color: black;
   text-decoration: none;
   border-bottom: 1px solid #ccc;
+  transition: border-color 0.3s;
 }
 
-/* Mobile Optimierung */
-@media (max-width: 850px) {
+.info-block a:hover {
+  border-bottom-color: black;
+}
+
+/* --- Responsive Anpassungen --- */
+
+@media (max-width: 1150px) {
   .about-grid {
-    grid-template-columns: 1fr;
-    gap: 50px;
+    grid-template-columns: 350px 1fr;
+    gap: 70px;
+  }
+}
+
+@media (max-width: 950px) {
+  .about-grid {
+    grid-template-columns: 1fr; /* Stapeln auf kleineren Bildschirmen */
+    gap: 60px;
   }
   
   .about-image {
-    max-width: 500px;
-    margin: 0 auto;
+    max-width: 350px; /* Auf dem Handy darf es wieder etwas mehr Präsenz haben */
+    margin: 0 auto 20px;
   }
-  
-  .about-page-container {
-    margin: 40px auto;
+
+  .about-section-main {
+    padding: 40px 25px;
+  }
+
+  .about-intro {
+    max-width: 100%;
   }
 }

@@ -1,43 +1,47 @@
-/* --- BASIS-EINSTELLUNGEN --- */
-:root {
-  --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --color-text: #1a1a1a;
-  --color-secondary: #777;
-  --spacing-header: 30px 60px;
-  --nav-gap: 35px;
-}
-
+/* --- BASIS & RESET --- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: var(--font-main);
-  background-color: #ffffff;
-  color: var(--color-text);
-  -webkit-font-smoothing: antialiased;
+/* Sticky Footer Vorbereitung */
+html, body {
+  height: 100%;
 }
 
-/* --- HEADER & NAVIGATION --- */
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: white;
+  color: black;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main dehnt sich aus, um Footer unten zu halten */
+main {
+  flex: 1;
+}
+
+/* --- HEADER --- */
 .site-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-header);
+  padding: 30px 60px;
+  background: white;
   position: sticky;
   top: 0;
-  background: white;
   z-index: 1000;
 }
 
 .logo a {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: bold;
   letter-spacing: 3px;
   text-decoration: none;
-  color: var(--color-text);
+  color: black;
   text-transform: uppercase;
 }
 
@@ -45,43 +49,199 @@ body {
   list-style: none;
   display: flex;
   align-items: center;
-  gap: var(--nav-gap);
+  gap: 30px;
 }
 
 .main-nav a {
   text-decoration: none;
-  color: var(--color-text);
+  color: black;
   font-size: 13px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  transition: color 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 
-.main-nav a:hover {
-  color: var(--color-secondary);
+/* LÖSUNG: Fixer Abstand vor About auf allen Seiten */
+.nav-item-spacer {
+  margin-left: 40px !important;
 }
 
-/* Der Fix für den "About" Abstand */
-.nav-spacer-left {
-  margin-left: 40px;
-  padding-left: 0; /* Sicherstellen, dass kein Padding stört */
+/* --- STARTSEITE: BILDER-GRID --- */
+.home-main {
+  padding: 20px 60px 20px 60px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+  height: 75vh;
+  min-height: 450px;
+}
+
+.category-card {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  text-decoration: none;
+}
+
+.category-image {
+  width: 100%;
+  height: 100%;
+}
+
+.category-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.category-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.4s ease;
+}
+
+.category-overlay span {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: bold;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+}
+
+/* Desktop Hover-Effekte */
+@media (min-width: 1025px) {
+  .category-card:hover .category-image img { transform: scale(1.05); }
+  .category-card:hover .category-overlay { background: rgba(0, 0, 0, 0.3); }
+  .category-card:hover .category-overlay span { opacity: 1; transform: translateY(0); }
+}
+
+/* --- FOOTER --- */
+.site-footer {
+  padding: 40px 60px;
+  background-color: white;
+  border-top: 1px solid #eee;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-content p {
+  font-size: 12px;
+  color: #888;
+  letter-spacing: 1px;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 25px;
+}
+
+.footer-nav a {
+  text-decoration: none;
+  color: black;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
 /* --- RESPONSIVE --- */
-@media (max-width: 900px) {
-  .site-header {
-    flex-direction: column;
-    padding: 20px;
-    gap: 20px;
-  }
+@media (max-width: 1024px) {
+  .site-header { flex-direction: column; padding: 20px; gap: 20px; }
+  .main-nav ul { gap: 15px; flex-wrap: wrap; justify-content: center; }
+  .nav-item-spacer { margin-left: 0 !important; }
+
+  .category-grid { grid-template-columns: 1fr; height: auto; }
+  .category-card { height: 300px; }
+
+  /* Mobile: Text & Overlay sofort sichtbar */
+  .category-overlay { background: rgba(0, 0, 0, 0.25); }
+  .category-overlay span { opacity: 1; transform: translateY(0); }
+
+  .footer-content { flex-direction: column; gap: 20px; text-align: center; }
+}
+
+
+
+
+/* --- OPTIMIERTE DIANA LIM STYLE GALLERY (Größere Bilder) --- */
+.gallery-page {
+  padding: 0;
+  /* Nutzt die volle Höhe, abzüglich eines kleinen Puffers für Titel/Header */
+  height: 100vh; 
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; 
+}
+
+.gallery-title {
+  /* Padding oben/unten reduziert, um Platz zu sparen */
+  padding: 20px 60px 0px; 
+}
+
+.gallery-title h1 {
+  font-size: 15px; 
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #000;
+  /* Kleinerer Abstand nach unten zum Bild */
+  margin-bottom: 10px; 
+}
+
+.photo-grid-horizontal {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex: 1;
+  /* Padding unten reduziert, damit Bilder tiefer gehen */
+  padding: 0 60px 20px 60px; 
+  gap: 10px;
   
-  .main-nav ul {
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .nav-spacer-left {
-    margin-left: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.photo-grid-horizontal::-webkit-scrollbar {
+  display: none;
+}
+
+.photo-item-horizontal {
+  flex: 0 0 auto;
+  /* Erhöht auf 92%, damit die Bilder fast den ganzen Platz einnehmen */
+  height: 92%; 
+}
+
+.photo-item-horizontal img {
+  height: 100%;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  -webkit-user-drag: none;
+}
+
+/* Anpassung für kleinere Bildschirme */
+@media (max-width: 1024px) {
+  .photo-grid-horizontal {
+    height: 85%;
+    padding: 0 20px 20px;
   }
 }

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galerie – Mira Bender Fotografie</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="logo"><a href="index.html">Mira Bender Fotografie</a></div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="galerie.html?cat=1">Fotojournalismus</a></li>
+        <li><a href="galerie.html?cat=2">Portrait</a></li>
+        <li><a href="galerie.html?cat=3">Hochzeiten</a></li>
+        <li><a href="galerie.html?cat=4">Freie Kunst</a></li>
+        <li><a href="galerie.html?cat=5">Street</a></li>
+        <li class="nav-item-spacer"><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="gallery-page">
+    <header class="gallery-title">
+      <h1 id="dynamic-title">Laden...</h1>
+    </header>
+
+    <div class="photo-grid-horizontal" id="image-container">
+      </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>&copy; 2026 Mira Bender Fotografie</p>
+      <nav class="footer-nav">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+      </nav>
+    </div>
+  </footer>
+
+<script>
+  // --- KONFIGURATION DER BILDER ---
+  // Hier trägst du die Dateinamen ein, die in deinen Ordnern liegen.
+  const config = {
+  '1': {
+    title: 'Fotojournalismus Kolonialismus',
+    folder: 'images/1FotojournalismusKolonialismus/',
+    images: ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg']
+  },
+  '2': {
+    title: 'Portraitfotografie',
+    folder: 'images/2Portraitfotografie/', // Name ohne Leerzeichen laut Screenshot
+    images: ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpeg', '11.jpg', '12.jpg', '13.jpg', '14.jpeg', '15.jpeg', '16.jpg', '17.jpg']
+  },
+  '3': {
+    title: 'Hochzeiten',
+    folder: 'images/3Hochzeiten/', // Name ohne Leerzeichen laut Screenshot
+    images: ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg', '11.jpg']
+  },
+  '4': {
+    title: 'Freie Kunst',
+    folder: 'images/4FreieKunst/', // Name ohne Leerzeichen laut Screenshot
+    images: ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg']
+  },
+  '5': {
+    title: 'Street',
+    folder: 'images/5RubrikStreet/', // ACHTUNG: Laut Screenshot heißt dieser Ordner "5RubrikStreet"
+    images: ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg']
+  }
+};
+
+  // --- DYNAMISCHE LOGIK ---
+  const urlParams = new URLSearchParams(window.location.search);
+  const catID = urlParams.get('cat') || '1'; // Falls nichts angegeben, zeige Rubrik 1
+  const selection = config[catID];
+
+  const container = document.getElementById('image-container');
+  const titleH1 = document.getElementById('dynamic-title');
+
+  if (selection) {
+    // 1. Titel der Seite setzen
+    titleH1.innerText = selection.title;
+    document.title = selection.title + " – Mira Bender";
+
+    // 2. Bilder generieren und einfügen
+    selection.images.forEach(fileName => {
+      const item = document.createElement('div');
+      item.className = 'photo-item-horizontal';
+      
+      const img = document.createElement('img');
+      img.src = selection.folder + fileName;
+      img.alt = selection.title;
+      
+      item.appendChild(img);
+      container.appendChild(item);
+    });
+  }
+
+  // --- DEIN BESTEHENDES SCROLL- & DRAG-SKRIPT ---
+  // (Füge hier den gesamten Code für 'wheel', 'mousedown' etc. ein, den wir zuvor erstellt haben)
+  const scrollContainer = document.querySelector('.photo-grid-horizontal');
+
+  scrollContainer.addEventListener('wheel', (evt) => {
+    if (evt.deltaY !== 0) {
+      evt.preventDefault();
+      scrollContainer.scrollLeft += evt.deltaY * 1.5; 
+    }
+  }, { passive: false });
+
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  // Wichtig: Da Bilder dynamisch kommen, müssen wir dragstart nach dem Laden verhindern
+  container.addEventListener('dragstart', (e) => {
+    if (e.target.tagName === 'IMG') e.preventDefault();
+  });
+
+  scrollContainer.addEventListener('mousedown', (e) => {
+    isDown = true;
+    scrollContainer.style.cursor = 'grabbing';
+    startX = e.pageX - scrollContainer.offsetLeft;
+    scrollLeft = scrollContainer.scrollLeft;
+  });
+
+  const stopDragging = () => {
+    isDown = false;
+    scrollContainer.style.cursor = 'grab';
+  };
+
+  scrollContainer.addEventListener('mouseleave', stopDragging);
+  scrollContainer.addEventListener('mouseup', stopDragging);
+  window.addEventListener('mouseup', stopDragging);
+
+  scrollContainer.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainer.offsetLeft;
+    const walk = (x - startX) * 2;
+    scrollContainer.scrollLeft = scrollLeft - walk;
+  });
+</script>
+
+</body>
+</html>
