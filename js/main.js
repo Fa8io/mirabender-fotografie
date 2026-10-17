@@ -12,6 +12,33 @@ function initFadeImages(root) {
   });
 }
 
+// Hamburger-Menü auf Mobile: öffnet/schließt die Navigation als Vollbild-Overlay.
+function initNavToggle() {
+  const toggle = document.getElementById('navToggle');
+  const nav = document.getElementById('mainNav');
+  if (!toggle || !nav) return;
+
+  function setOpen(isOpen) {
+    nav.classList.toggle('is-open', isOpen);
+    toggle.classList.toggle('is-open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  toggle.addEventListener('click', function () {
+    setOpen(!nav.classList.contains('is-open'));
+  });
+
+  nav.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () { setOpen(false); });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setOpen(false);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   initFadeImages();
+  initNavToggle();
 });
