@@ -31,6 +31,13 @@
       </div>
   </main>
 
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Schließen">&times;</button>
+    <button class="lightbox-prev" id="lightboxPrev" aria-label="Vorheriges Bild">&#8249;</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <button class="lightbox-next" id="lightboxNext" aria-label="Nächstes Bild">&#8250;</button>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-content">
       <p>&copy; 2026 Mira Bender Fotografie</p>
@@ -41,6 +48,7 @@
     </div>
   </footer>
 
+<script src="js/main.js"></script>
 <script>
   // --- KONFIGURATION DER BILDER ---
   // Hier trägst du die Dateinamen ein, die in deinen Ordnern liegen.
@@ -79,6 +87,7 @@
 
   const container = document.getElementById('image-container');
   const titleH1 = document.getElementById('dynamic-title');
+  const imageSources = [];
 
   if (selection) {
     // 1. Titel der Seite setzen
@@ -86,19 +95,26 @@
     document.title = selection.title + " – Mira Bender";
 
     // 2. Bilder generieren und einfügen
-    selection.images.forEach(fileName => {
+    selection.images.forEach((fileName, index) => {
+      const src = selection.folder + fileName;
+      imageSources.push(src);
+
       const item = document.createElement('div');
       item.className = 'photo-item-horizontal';
-      
+
       const img = document.createElement('img');
-      img.src = selection.folder + fileName;
+      img.className = 'fade-img';
+      img.src = src;
       img.alt = selection.title;
       img.loading = 'lazy';
       img.decoding = 'async';
-      
+      img.dataset.index = index;
+
       item.appendChild(img);
       container.appendChild(item);
     });
+
+    initFadeImages(container);
   }
 
   // --- DEIN BESTEHENDES SCROLL- & DRAG-SKRIPT ---
@@ -115,6 +131,7 @@
   let isDown = false;
   let startX;
   let scrollLeft;
+  let didDrag = false;
 
   // Wichtig: Da Bilder dynamisch kommen, müssen wir dragstart nach dem Laden verhindern
   container.addEventListener('dragstart', (e) => {
@@ -123,6 +140,7 @@
 
   scrollContainer.addEventListener('mousedown', (e) => {
     isDown = true;
+    didDrag = false;
     scrollContainer.style.cursor = 'grabbing';
     startX = e.pageX - scrollContainer.offsetLeft;
     scrollLeft = scrollContainer.scrollLeft;
@@ -142,7 +160,61 @@
     e.preventDefault();
     const x = e.pageX - scrollContainer.offsetLeft;
     const walk = (x - startX) * 2;
+    if (Math.abs(walk) > 5) didDrag = true;
     scrollContainer.scrollLeft = scrollLeft - walk;
+  });
+
+  // --- LIGHTBOX: Bild antippen/anklicken = groß anzeigen ---
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  let currentIndex = 0;
+
+  function showImage(index) {
+    currentIndex = (index + imageSources.length) % imageSources.length;
+    lightboxImg.classList.remove('is-loaded');
+    lightboxImg.src = imageSources[currentIndex];
+    lightboxImg.alt = selection ? selection.title : '';
+  }
+
+  function openLightbox(index) {
+    if (!imageSources.length) return;
+    showImage(index);
+    lightbox.classList.add('is-active');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('is-active');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  lightboxImg.addEventListener('load', () => lightboxImg.classList.add('is-loaded'));
+
+  container.addEventListener('click', (e) => {
+    const img = e.target.closest('img');
+    if (!img || didDrag) return;
+    openLightbox(Number(img.dataset.index));
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxPrev.addEventListener('click', () => showImage(currentIndex - 1));
+  lightboxNext.addEventListener('click', () => showImage(currentIndex + 1));
+
+  // Klick auf den dunklen Hintergrund schließt die Ansicht
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('is-active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
+    if (e.key === 'ArrowRight') showImage(currentIndex + 1);
   });
 </script>
 

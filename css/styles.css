@@ -161,6 +161,20 @@ main {
   letter-spacing: 1.5px;
 }
 
+/* --- BILD FADE-IN BEIM LADEN --- */
+.fade-img {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.fade-img.is-loaded {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-img { transition: none; }
+}
+
 /* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
   .site-header { flex-direction: column; padding: 20px; gap: 20px; }
@@ -184,10 +198,11 @@ main {
 .gallery-page {
   padding: 0;
   /* Nutzt die volle Höhe, abzüglich eines kleinen Puffers für Titel/Header */
-  height: 100vh; 
+  height: 100vh;
+  height: 100dvh; /* korrekte Höhe auf Mobile trotz Adressleiste */
   display: flex;
   flex-direction: column;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .gallery-title {
@@ -213,9 +228,10 @@ main {
   overflow-y: hidden;
   flex: 1;
   /* Padding unten reduziert, damit Bilder tiefer gehen */
-  padding: 0 60px 20px 60px; 
+  padding: 0 60px 20px 60px;
   gap: 10px;
-  
+  cursor: grab;
+
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -227,7 +243,7 @@ main {
 .photo-item-horizontal {
   flex: 0 0 auto;
   /* Erhöht auf 92%, damit die Bilder fast den ganzen Platz einnehmen */
-  height: 92%; 
+  height: 92%;
 }
 
 .photo-item-horizontal img {
@@ -236,6 +252,7 @@ main {
   display: block;
   object-fit: contain;
   -webkit-user-drag: none;
+  cursor: zoom-in;
 }
 
 /* Anpassung für kleinere Bildschirme */
@@ -244,4 +261,89 @@ main {
     height: 85%;
     padding: 0 20px 20px;
   }
+}
+
+/* Mobile: sanftes Einrasten pro Bild statt freiem Scrollen */
+@media (max-width: 768px) {
+  .photo-grid-horizontal {
+    scroll-snap-type: x proximity;
+  }
+
+  .photo-item-horizontal {
+    scroll-snap-align: center;
+  }
+}
+
+/* --- LIGHTBOX (groß angezeigtes Bild, Klick/Tap zum Öffnen) --- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+}
+
+.lightbox.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 88vh;
+  object-fit: contain;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.lightbox-img.is-loaded {
+  opacity: 1;
+}
+
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  line-height: 1;
+  padding: 12px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.lightbox-close:hover,
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  opacity: 1;
+}
+
+.lightbox-close {
+  top: 10px;
+  right: 15px;
+  font-size: 30px;
+}
+
+.lightbox-prev,
+.lightbox-next {
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 34px;
+}
+
+.lightbox-prev { left: 5px; }
+.lightbox-next { right: 5px; }
+
+@media (max-width: 768px) {
+  .lightbox-close { top: 6px; right: 6px; font-size: 26px; }
+  .lightbox-prev, .lightbox-next { font-size: 26px; padding: 16px 10px; }
 }
