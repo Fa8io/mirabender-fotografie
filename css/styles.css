@@ -228,8 +228,11 @@ main {
   .footer-content { flex-direction: column; gap: 20px; text-align: center; }
 }
 
-/* --- MOBILE NAV: Hamburger öffnet Vollbild-Menü --- */
-@media (max-width: 640px) {
+/* --- MOBILE NAV: Hamburger öffnet Vollbild-Menü ---
+   Gilt auch im Querformat (breiter als 640px, aber wenig Höhe) - sonst
+   würde die mehrzeilige Tablet-Navigation den Großteil des knappen
+   Platzes auf dem gedrehten Handy fressen. */
+@media (max-width: 640px), (max-height: 500px) and (orientation: landscape) {
   .site-header {
     flex-direction: row;
     justify-content: space-between;
@@ -275,6 +278,33 @@ main {
     margin-top: 14px;
     padding-top: 14px;
     border-top: 1px solid #eee;
+  }
+}
+
+/* Querformat mit wenig Höhe: Menüpunkte als umbrechende Reihe statt
+   langer senkrechter Liste, damit das Vollbild-Menü nicht höher als der
+   Bildschirm wird. */
+@media (max-height: 500px) and (orientation: landscape) {
+  .main-nav {
+    overflow-y: auto;
+    padding: 20px 0;
+  }
+
+  .main-nav ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 28px;
+  }
+
+  .main-nav a {
+    font-size: 15px;
+  }
+
+  .nav-item-spacer {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
   }
 }
 
@@ -366,8 +396,10 @@ main {
    Masonry (CSS-Spalten) statt festem Seitenverhältnis, damit schmale
    (Hochformat) und breite (Querformat) Bilder beide unbeschnitten in
    ihrem echten Seitenverhältnis dargestellt werden - unabhängig davon,
-   welche Bilder später eingefügt werden. */
-@media (max-width: 640px) {
+   welche Bilder später eingefügt werden. Gilt auch im Querformat mit
+   wenig Höhe - sonst würde die alte, auf Bildschirmhöhe gequetschte
+   Scroll-Reihe greifen. */
+@media (max-width: 640px), (max-height: 500px) and (orientation: landscape) {
   .gallery-page {
     /* Aus dem flex:1-Mechanismus von <main> herausnehmen (siehe Kommentar
        oben bei html/body) - sonst würde die Höhe auf Basis des (bei
