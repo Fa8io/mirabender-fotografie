@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Galerie – Mira Bender Fotografie</title>
-  <link rel="stylesheet" href="css/styles.css?v=3">
+  <link rel="stylesheet" href="css/styles.css?v=4">
 </head>
 <body>
 
@@ -15,9 +15,9 @@
     </button>
     <nav class="main-nav" id="mainNav">
       <ul>
-        <li><a href="galerie.html?cat=1">Fotojournalismus</a></li>
-        <li><a href="galerie.html?cat=2">Portrait</a></li>
         <li><a href="galerie.html?cat=3">Hochzeiten</a></li>
+        <li><a href="galerie.html?cat=2">Portrait</a></li>
+        <li><a href="galerie.html?cat=1">Fotojournalismus</a></li>
         <li><a href="galerie.html?cat=4">Freie Kunst</a></li>
         <li><a href="galerie.html?cat=5">Street</a></li>
         <li class="nav-item-spacer"><a href="about.html">About</a></li>
@@ -51,7 +51,7 @@
     </div>
   </footer>
 
-<script src="js/main.js?v=3"></script>
+<script src="js/main.js?v=4"></script>
 <script>
   // --- KONFIGURATION DER BILDER ---
   // Hier trägst du die Dateinamen ein, die in deinen Ordnern liegen.
@@ -219,6 +219,23 @@
     if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
     if (e.key === 'ArrowRight') showImage(currentIndex + 1);
   });
+
+  // Wischen (Touch) blättert in der Großbild-Ansicht weiter/zurück
+  let touchStartX = null;
+
+  lightbox.addEventListener('touchstart', (e) => {
+    if (e.target.closest('button')) { touchStartX = null; return; }
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+
+  lightbox.addEventListener('touchend', (e) => {
+    if (touchStartX === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(deltaX) < 40) return;
+    if (deltaX < 0) showImage(currentIndex + 1);
+    else showImage(currentIndex - 1);
+  }, { passive: true });
 </script>
 
 </body>

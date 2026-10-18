@@ -343,14 +343,52 @@ main {
   }
 }
 
-/* Mobile: sanftes Einrasten pro Bild statt freiem Scrollen */
-@media (max-width: 768px) {
+/* Tablet: sanftes Einrasten pro Bild statt freiem Scrollen */
+@media (max-width: 768px) and (min-width: 641px) {
   .photo-grid-horizontal {
     scroll-snap-type: x proximity;
   }
 
   .photo-item-horizontal {
     scroll-snap-align: center;
+  }
+}
+
+/* Handy: Raster statt horizontalem Scrollen - man sieht alle Bilder einer
+   Rubrik auf einen Blick und tippt eins an, um es groß zu sehen. */
+@media (max-width: 640px) {
+  .gallery-page {
+    height: auto;
+    min-height: 100dvh;
+    display: block;
+    overflow: visible;
+  }
+
+  .gallery-title {
+    padding: 20px 20px 0;
+  }
+
+  .photo-grid-horizontal {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    height: auto;
+    overflow: visible;
+    padding: 16px 16px 50px;
+    cursor: default;
+  }
+
+  .photo-item-horizontal {
+    height: auto;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  .photo-item-horizontal img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
