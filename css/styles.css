@@ -7,7 +7,10 @@
 
 /* Sticky Footer Vorbereitung */
 html, body {
-  height: 100%;
+  /* min-height statt height: lässt die Seite wachsen, wenn der Inhalt
+     (z.B. das mobile Bilder-Raster) höher als der Bildschirm ist, statt
+     den Footer an der Bildschirmhöhe "festzuklemmen". */
+  min-height: 100%;
 }
 
 body {
@@ -355,7 +358,11 @@ main {
 }
 
 /* Handy: Raster statt horizontalem Scrollen - man sieht alle Bilder einer
-   Rubrik auf einen Blick und tippt eins an, um es groß zu sehen. */
+   Rubrik auf einen Blick und tippt eins an, um es groß zu sehen.
+   Masonry (CSS-Spalten) statt festem Seitenverhältnis, damit schmale
+   (Hochformat) und breite (Querformat) Bilder beide unbeschnitten in
+   ihrem echten Seitenverhältnis dargestellt werden - unabhängig davon,
+   welche Bilder später eingefügt werden. */
 @media (max-width: 640px) {
   .gallery-page {
     height: auto;
@@ -369,9 +376,9 @@ main {
   }
 
   .photo-grid-horizontal {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    display: block;
+    column-count: 2;
+    column-gap: 10px;
     height: auto;
     overflow: visible;
     padding: 16px 16px 50px;
@@ -381,14 +388,15 @@ main {
   .photo-item-horizontal {
     height: auto;
     width: 100%;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
+    break-inside: avoid;
+    margin-bottom: 10px;
   }
 
   .photo-item-horizontal img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    display: block;
+    object-fit: initial;
   }
 }
 
