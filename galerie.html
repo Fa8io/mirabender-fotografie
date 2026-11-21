@@ -69,13 +69,24 @@
   },
   '3': {
     title: 'Hochzeiten',
-    folder: 'images/3Hochzeiten/',
-    images: ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg']
+    // Zwei Bild-Reihenfolgen: eine fürs breite Display (Desktop), eine für
+    // schmale Bildschirme (Handy) - welche aktiv ist, hängt von derselben
+    // Grenze ab wie beim Hamburger-Menü/Mobile-Raster (siehe mobileQuery).
+    responsive: {
+      desktop: {
+        folder: 'images/3Hochzeiten/desktop/',
+        images: ['1.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg']
+      },
+      mobile: {
+        folder: 'images/3Hochzeiten/handy/',
+        images: ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg']
+      }
+    }
   },
   '4': {
     title: 'Freie Kunst',
     folder: 'images/4FreieKunst/',
-    images: ['1.jpg', '2.jpg', '2,2.jpg', '3.jpg', '3.3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '7.5.jpg']
+    images: ['1.jpg', '2.jpg', '2,2.jpg', '3.jpg', '3.3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg']
   },
   '5': {
     title: 'Street',
@@ -93,14 +104,25 @@
   const titleH1 = document.getElementById('dynamic-title');
   const imageSources = [];
 
-  if (selection) {
-    // 1. Titel der Seite setzen
-    titleH1.innerText = selection.title;
-    document.title = selection.title + " – Mira Bender";
+  // Gleiche Grenze wie beim Hamburger-Menü/Mobile-Raster in styles.css:
+  // schmaler Bildschirm ODER wenig Höhe im Querformat gilt als "mobil".
+  const mobileQuery = window.matchMedia('(max-width: 640px), (max-height: 500px) and (orientation: landscape)');
 
-    // 2. Bilder generieren und einfügen
-    selection.images.forEach((fileName, index) => {
-      const src = selection.folder + fileName;
+  function getActiveVariant() {
+    if (selection.responsive) {
+      return mobileQuery.matches ? selection.responsive.mobile : selection.responsive.desktop;
+    }
+    return selection;
+  }
+
+  function buildGallery() {
+    container.innerHTML = '';
+    imageSources.length = 0;
+
+    const variant = getActiveVariant();
+
+    variant.images.forEach((fileName, index) => {
+      const src = variant.folder + fileName;
       imageSources.push(src);
 
       const item = document.createElement('div');
@@ -119,6 +141,22 @@
     });
 
     initFadeImages(container);
+  }
+
+  if (selection) {
+    // 1. Titel der Seite setzen
+    titleH1.innerText = selection.title;
+    document.title = selection.title + " – Mira Bender";
+
+    // 2. Bilder generieren und einfügen
+    buildGallery();
+
+    // Beim Überschreiten der Grenze (z.B. Handy gedreht, Fenster in der
+    // Breite verändert) die passende Bilder-Reihenfolge neu laden.
+    mobileQuery.addEventListener('change', () => {
+      closeLightbox();
+      buildGallery();
+    });
   }
 
   // --- DEIN BESTEHENDES SCROLL- & DRAG-SKRIPT ---
