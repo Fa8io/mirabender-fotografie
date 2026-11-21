@@ -29,8 +29,8 @@
 /* Text-Inhalt */
 .about-content h1 {
   /* Angepasst an den dezenten Galerie-Stil */
-  font-size: 15px; 
-  font-weight: 300;
+  font-size: 15px;
+  font-weight: 700;
   letter-spacing: 4px;
   text-transform: uppercase;
   margin-bottom: 45px;
@@ -43,6 +43,14 @@
   color: #333;
   margin-bottom: 60px;
   max-width: 550px; /* Optimale Lesebreite */
+}
+
+.about-intro p {
+  margin-bottom: 18px;
+}
+
+.about-intro p:last-child {
+  margin-bottom: 0;
 }
 
 /* Die Info-Blöcke (Kontakt, Ausbildung etc.) */
