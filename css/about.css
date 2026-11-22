@@ -84,6 +84,12 @@
   border-bottom-color: black;
 }
 
+.instagram-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 /* --- Responsive Anpassungen --- */
 
 @media (max-width: 1150px) {
